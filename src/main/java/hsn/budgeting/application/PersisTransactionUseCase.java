@@ -2,7 +2,10 @@ package hsn.budgeting.application;
 
 import hsn.budgeting.domain.Transaction;
 import hsn.budgeting.domain.TransactionRepository;
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.stereotype.Service;
 
+@Service
 public class PersisTransactionUseCase {
 
     private final TransactionRepository transactionRepository;
@@ -10,12 +13,12 @@ public class PersisTransactionUseCase {
     public PersisTransactionUseCase(TransactionRepository transactionRepository) {
         this.transactionRepository = transactionRepository;
     }
-
-    public PersistTransactionOutput execute(PersistTransactionInput input){
+    @Tool(name = "persist-transaction", description = "Salva uma nova transação")
+    public TransactionOutput execute(TransactionInput input){
         var transaction = transactionRepository
                 .save(new Transaction(input.description(), input.amount(), input.category()));
 
-        return PersistTransactionOutput.from(transaction);
+        return TransactionOutput.from(transaction);
     }
 
 }

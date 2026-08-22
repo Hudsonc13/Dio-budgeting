@@ -1,6 +1,13 @@
 package hsn.budgeting.domain;
 
 
+import hsn.budgeting.infra.persistence.entity.TransactionEntity;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+
+@Getter
+@AllArgsConstructor
 public class Transaction {
 
     private TransactionId id;
@@ -16,19 +23,4 @@ public class Transaction {
         this.category = category;
     }
 
-    public TransactionId getId() {
-        return id;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public long getAmount() {
-        return amount;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
 }

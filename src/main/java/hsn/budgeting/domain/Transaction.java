@@ -1,9 +1,11 @@
 package hsn.budgeting.domain;
 
 
-import hsn.budgeting.infra.persistence.entity.TransactionEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.time.Instant;
+import java.time.LocalDate;
 
 
 @Getter
@@ -14,13 +16,15 @@ public class Transaction {
     private String description;
     private long amount;
     private Category category;
+    private LocalDate date;
 
 
-    public Transaction(String description, long amount, Category category) {
+    public Transaction(String description, long amount, Category category, LocalDate date) {
         this.id = new TransactionId();
         this.description = description;
         this.amount = amount;
         this.category = category;
+        this.date = date;
     }
 
 }

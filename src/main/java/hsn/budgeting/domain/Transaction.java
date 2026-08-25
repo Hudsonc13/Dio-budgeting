@@ -6,6 +6,7 @@ import lombok.Getter;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Optional;
 
 
 @Getter
@@ -19,12 +20,12 @@ public class Transaction {
     private LocalDate date;
 
 
-    public Transaction(String description, long amount, Category category, LocalDate date) {
+    public Transaction(String description, long amount, Category category, Optional<LocalDate> date) {
         this.id = new TransactionId();
         this.description = description;
         this.amount = amount;
         this.category = category;
-        this.date = date;
+        this.date = date.get();
     }
 
 }

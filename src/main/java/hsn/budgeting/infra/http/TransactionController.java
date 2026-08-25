@@ -48,10 +48,10 @@ public class TransactionController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public TransactionResponse createTransaction(@RequestBody TransactionRequest request){
-        var output = transactionUseCase.execute(request.toInput());
+    public List<TransactionResponse> createTransaction(@RequestBody List<TransactionRequest> request){
+        var output = transactionUseCase.execute(request.stream().map(TransactionRequest::toInput).toList());
 
-        return TransactionResponse.from(output);
+        return output.stream().map(TransactionResponse::from).toList();
     }
 
     @GetMapping("/{category}")

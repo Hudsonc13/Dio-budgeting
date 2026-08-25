@@ -3,6 +3,7 @@ package hsn.budgeting.infra.persistence.entity;
 import hsn.budgeting.domain.Category;
 import hsn.budgeting.domain.Transaction;
 import hsn.budgeting.domain.TransactionId;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,7 @@ public class TransactionEntity {
     private String description;
     private long amount;
     private Category category;
+    @Nullable
     private LocalDate date;
 
 

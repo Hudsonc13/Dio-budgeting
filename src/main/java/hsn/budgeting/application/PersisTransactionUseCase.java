@@ -1,13 +1,13 @@
 package hsn.budgeting.application;
 
-import com.ethlo.time.DateTime;
 import hsn.budgeting.domain.Transaction;
 import hsn.budgeting.domain.TransactionRepository;
 import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class PersisTransactionUseCase {
@@ -17,12 +17,16 @@ public class PersisTransactionUseCase {
     public PersisTransactionUseCase(TransactionRepository transactionRepository) {
         this.transactionRepository = transactionRepository;
     }
-    @Tool(name = "persist-transaction", description = "Salva uma nova transação")
-    public TransactionOutput execute(TransactionInput input){
-        var transaction = transactionRepository
-                .save(new Transaction(input.description(), input.amount(), input.category(), input.date()));
+    @Tool(name = "persist-transaction", description = "Salva uma ou mais transações")
+    public List<TransactionOutput> execute(@ToolParam(description = "Lista de transações") List<TransactionInput> inputs){
 
-        return TransactionOutput.from(transaction);
+        List<Transaction> transactions = new ArrayList<>();
+
+        for(TransactionInput i : inputs) {
+            transactions.add(transactionRepository
+                    .save(new Transaction(i.description(), i.amount(), i.category(), i.date())));
+        }
+        return transactions.stream().map(TransactionOutput::from).toList();
     }
 
 }

@@ -1,6 +1,7 @@
 package hsn.budgeting.infra.http;
 
 
+import hsn.budgeting.application.CreateTransactionUseCase;
 import hsn.budgeting.application.ListTransactionsByCategoryUseCase;
 import hsn.budgeting.application.PersisTransactionUseCase;
 import hsn.budgeting.domain.Category;
@@ -9,6 +10,7 @@ import hsn.budgeting.infra.http.response.TransactionResponse;
 import org.springframework.ai.audio.transcription.TranscriptionModel;
 import org.springframework.ai.audio.tts.TextToSpeechModel;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -25,31 +27,34 @@ import java.util.List;
 public class TransactionController {
 
 
-    private final PersisTransactionUseCase transactionUseCase;
+    private final CreateTransactionUseCase createTransactionUseCase;
+    private final PersisTransactionUseCase persisttransactionUseCase;
     private final ListTransactionsByCategoryUseCase listTransactionsByCategoryUseCase;
     private final TranscriptionModel transcptionModel;
     private final ChatClient chatClient;
     private final TextToSpeechModel textToSpeechModel;
 
-    public TransactionController(PersisTransactionUseCase transactionUseCase,
+    public TransactionController(CreateTransactionUseCase createTransactionUseCase,
+                                 PersisTransactionUseCase persisttransactionUseCase,
                                  ListTransactionsByCategoryUseCase listTransactionsByCategoryUseCase,
                                  @Value("classpath:/prompts/system.st") Resource systemPrompt,
                                  TranscriptionModel transcptionModel,
                                  ChatClient.Builder chatClientBuilder, TextToSpeechModel textToSpeechModel) throws IOException {
-        this.transactionUseCase = transactionUseCase;
+        this.createTransactionUseCase = createTransactionUseCase;
+        this.persisttransactionUseCase = persisttransactionUseCase;
         this.listTransactionsByCategoryUseCase = listTransactionsByCategoryUseCase;
         this.transcptionModel = transcptionModel;
         this.textToSpeechModel = textToSpeechModel;
         this.chatClient = chatClientBuilder
                 .defaultSystem(systemPrompt.getContentAsString(Charset.defaultCharset()))
-                .defaultTools(transactionUseCase, listTransactionsByCategoryUseCase)
+                .defaultTools(persisttransactionUseCase, listTransactionsByCategoryUseCase, createTransactionUseCase)
                 .build();
     }
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public List<TransactionResponse> createTransaction(@RequestBody List<TransactionRequest> request){
-        var output = transactionUseCase.execute(request.stream().map(TransactionRequest::toInput).toList());
+        var output = persisttransactionUseCase.execute(request.stream().map(TransactionRequest::toInput).toList());
 
         return output.stream().map(TransactionResponse::from).toList();
     }

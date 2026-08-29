@@ -15,5 +15,8 @@ public record TransactionOutput(String description, long amount, Category catego
         return new TransactionOutput(transaction.getDescription(), transaction.getAmount(), transaction.getCategory(), transaction.getDate());
     }
 
+    public static TransactionOutput fromInput(TransactionInput input){
+        return new TransactionOutput(input.description(), input.amount(), input.category(), input.date().get());
+    }
 
 }

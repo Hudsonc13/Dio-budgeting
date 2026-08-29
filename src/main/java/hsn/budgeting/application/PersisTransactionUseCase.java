@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+// ESSE USECASE NÃO DEVE SER UMA TOOL FIXA CreateTransactionUseCase da IA
+
 @Service
 public class PersisTransactionUseCase {
 
@@ -17,6 +19,8 @@ public class PersisTransactionUseCase {
     public PersisTransactionUseCase(TransactionRepository transactionRepository) {
         this.transactionRepository = transactionRepository;
     }
+
+
     @Tool(name = "persist-transaction", description = "Salva uma ou mais transações")
     public List<TransactionOutput> execute(@ToolParam(description = "Lista de transações") List<TransactionInput> inputs){
 

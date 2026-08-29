@@ -2,6 +2,7 @@ package hsn.budgeting.infra.http.request;
 
 import hsn.budgeting.application.TransactionInput;
 import hsn.budgeting.domain.Category;
+import org.springframework.cglib.core.Local;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -13,4 +14,8 @@ public record TransactionRequest(String description, long amount, Category categ
     public TransactionInput toInput(){
         return new TransactionInput(description, amount, category, date);
     }
+
+
+
+
 }

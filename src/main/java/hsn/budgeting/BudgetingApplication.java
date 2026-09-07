@@ -1,5 +1,9 @@
 package hsn.budgeting;
 
+import hsn.budgeting.infra.websocket.WebSocketAudioHandler;
+import org.springframework.ai.audio.transcription.AudioTranscriptionPrompt;
+import org.springframework.ai.audio.transcription.AudioTranscriptionResponse;
+import org.springframework.ai.audio.transcription.TranscriptionModel;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
